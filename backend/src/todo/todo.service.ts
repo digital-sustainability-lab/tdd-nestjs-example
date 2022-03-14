@@ -21,8 +21,12 @@ export class TodoService {
     return `This action returns a #${id} todo`;
   }
 
-  update(id: number, updateTodoDto: UpdateTodoDto) {
-    return this.repo.update(id, updateTodoDto);
+  async update(id: number, updateTodoDto: UpdateTodoDto) {
+    const todo = await this.repo.findOne(id);
+    Object.keys(updateTodoDto).forEach((key) => {
+      todo[key] = updateTodoDto[key];
+    });
+    return this.repo.save(todo);
   }
 
   remove(id: number) {

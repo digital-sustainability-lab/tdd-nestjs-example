@@ -50,7 +50,8 @@ describe('TodoService', () => {
     expect(todo.id).toBe(1);
   });
   it('should update current entry', async () => {
-    const spy = jest.spyOn(repository, 'update');
+    const findSpy = jest.spyOn(repository, 'findOne');
+    const saveSpy = jest.spyOn(repository, 'save');
     const createDto: CreateTodoDto = {
       title: 'Testing',
       status: 'open',
@@ -61,7 +62,8 @@ describe('TodoService', () => {
       status: 'closed',
     };
     const updatedTodo = await service.update(todo.id, updateDto);
-    expect(spy).toBeCalledTimes(1);
-    expect(updateDto.status).toBe('closed');
+    expect(findSpy).toBeCalledTimes(1);
+    expect(saveSpy).toBeCalledTimes(2);
+    expect(updatedTodo.status).toBe('closed');
   });
 });
